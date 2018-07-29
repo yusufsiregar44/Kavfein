@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>it worked!</h1>
+    <router-view/>
     <footer class="footer has-text-centered" style="height: 70px">
       <div class="container">
         <div class="columns">
@@ -27,8 +27,8 @@
 @import "~bulma/sass/utilities/_all";
 
 // Set your colors
-$primary: #000000;
-$primary-invert: findColorInvert($primary);
+$primary: $white;
+$primary-invert: $black;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (

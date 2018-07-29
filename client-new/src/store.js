@@ -23,12 +23,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-
+    adminIsLoggedIn: false,
   },
   mutations: {
 
   },
   actions: {
-    
+
   },
 });
