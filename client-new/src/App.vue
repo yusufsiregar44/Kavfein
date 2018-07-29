@@ -27,8 +27,8 @@
 @import "~bulma/sass/utilities/_all";
 
 // Set your colors
-$primary: $white;
-$primary-invert: $black;
+$primary: $black;
+$primary-invert: $white;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (

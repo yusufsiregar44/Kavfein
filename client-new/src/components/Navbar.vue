@@ -12,29 +12,49 @@
         <span></span>
         </span>
       </div>
-      <div id="navbarMenuHeroB" class="navbar-menu">
+      <div class="navbar-menu">
         <div class="navbar-end">
-          <a class="navbar-item" slot="trigger">
+          <b-dropdown position="is-bottom-left">
+            <a class="navbar-item" slot="trigger">
               <a class="button is-inverted">
                 <span class="icon">
                   <i class="fas fa-sign-in-alt"></i>
                 </span>
                 <span>Admin Login</span>
               </a>
-          </a>
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-item">
-              <i class="fas fa-shopping-cart" style="font-size:20px; color: #363636"></i>
             </a>
-            <div class="navbar-dropdown is-boxed is-right">
-              <hr class="navbar-divider">
-              <a class="navbar-item">
-              </a>
-              <a class="navbar-item">
-                <span class="button is-success is-small" id="checkout-button">Checkout</span>
-              </a>
-            </div>
-          </div>
+
+            <b-dropdown-item custom paddingless>
+              <form action="">
+                <div class="modal-card" style="width:300px;">
+                  <section class="modal-card-body">
+                    <EmailField @input="updateEmail"></EmailField>
+
+                    <PasswordField @input="updatePassword"></PasswordField>
+
+                  </section>
+                  <footer class="modal-card-foot">
+                    <button class="button is-primary" @click="login">Login</button>
+                  </footer>
+                </div>
+              </form>
+            </b-dropdown-item>
+          </b-dropdown>
+
+      <b-dropdown hoverable position="is-bottom-left">
+        <a class="navbar-item" slot="trigger">
+          <span class="icon">
+            <i class="fas fa-shopping-cart" style="font-size:20px; color: #363636"></i>
+          </span>
+        </a>
+
+      <b-dropdown-item custom>Blue Batak - 200g</b-dropdown-item>
+      <b-dropdown-item separator></b-dropdown-item>
+      <b-dropdown-item custom>
+        <a class="button is-success">Checkout</a>
+      </b-dropdown-item>
+    </b-dropdown>
+
         </div>
       </div>
     </div>
@@ -42,8 +62,35 @@
 </template>
 
 <script>
+import EmailField from '@/components/EmailField.vue'
+import PasswordField from '@/components/PasswordField.vue'
+
 export default {
-  
+  components: {
+    EmailField,
+    PasswordField,
+  },
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    login() {
+
+    },
+    // eslint-disable-next-line
+    updateEmail(e) {
+      // eslint-disable-next-line
+      console.log(e);
+    },
+    // eslint-disable-next-line
+    updatePassword(e) {
+      // eslint-disable-next-line
+      console.log(e);
+    },
+  },
 }
 </script>
 
