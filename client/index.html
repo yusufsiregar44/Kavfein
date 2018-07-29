@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My first Bulma website</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+  <section class="hero is-primary is-large" id="app">
+    <div class="hero-head">
+      <nav class="navbar" role="navigation" aria-label="main navigation" id="navigation-bar">
+        <div class="navbar-brand">
+          <a class="navbar-item">
+            <i class="fas fa-coffee" style="font-size:37px;"></i>
+            <h1 class="title" style="margin:15px">Kavfeine</h1>
+          </a>
+        </div>
+        <div class="navbar-menu" style="margin:10px">
+          <div class="navbar-start">
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-item">Bean Grades</a>
+              <div class="navbar-dropdown is-boxed">
+                <a class="navbar-item is-active">The Apprentice</a>
+                <a class="navbar-item">The Fellow</a>
+                <a class="navbar-item">The Grandmaster</a>
+              </div>
+            </div>
+          </div>
+          <div class="navbar-end">
+            <a class="navbar-item">
+              Home
+            </a>
+            <a class="navbar-item">
+              About
+            </a>
+            <a class="navbar-item">
+              Terms & Conditions
+            </a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-item">
+                  <p>{{ itemsInCartCount }}</p>  <i class="fas fa-shopping-cart" style="font-size:20px"></i>
+              </a>
+              <div class="navbar-dropdown is-boxed is-right">
+                <a class="navbar-item" name="shopped-item" v-for="item in itemsInCart">{{ item.name }}</a>
+                <hr class="navbar-divider">
+                <a class="navbar-item">
+                  Total amount: Rp. {{ totalCheckoutAmount }}
+                </a>
+                <a class="navbar-item">
+                  <span class="button is-success is-small" id="checkout-button" v-on:click="checkout">Checkout</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="container has-text-centered">
+        <h1 class="title">
+          The Apprentice
+        </h1>
+        <h2 class="subtitle">
+           Coffee beans for you newbies.
+        </h2>
+      </div>
+    </div>
+
+    <div class="modal" v-bind:class="{'is-active':isActive}">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <div class="content has-text-centered">
+            <p class="control">
+              <h3 class="subtitle is-4">Your Total Checkout Amount is:</h3>
+              <h2 class="title is-2"> Rp. {{ totalCheckoutAmount }}</h2>
+            </p>
+            <a class="button is-success is-focused" @click="confirmCheckout">Confirm Checkout</a>
+            <span>&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <button @click="close" class="modal-close"></button>
+    </div>
+
+    <!-- <div class="hero-body"> -->
+      <div class="columns is-multiline" style="margin:10px">
+        <div class="column is-one-third" v-for="item in items">
+          <div class="card">
+            <div class="card-content">
+              <figure class="itemImage">
+                <img v-bind:src="item.imgSrC">
+              </figure>
+              <p class="title">{{ item.name }}</p>
+              <p class="subtitle is-6">{{ item.description }}</p>
+              <br>
+              <h2 class="title is-4 is-spaced">Rp. {{ item.price}}</h2>
+            </div>
+            <footer class="card-footer">
+              <div class="card-footer-item">
+                <a class="button" name="buy-button" v-on:click="addedItem1ToCartAlert">
+                  Buy
+                </a>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </div>
+    <!-- </div> -->
+
+    <div class="hero-foot">
+      <footer class="footer has-text-centered">
+        <div class="container">
+          <div class="columns">
+            <div class="column is-8-desktop is-offset-2-desktop">
+              <p>
+                <strong class="has-text-weight-semibold">
+                  Made with <i class="fas fa-heart" style="color:#FF1493"></i> By <a href="https://github.com/yusufsiregar44" style="color:#3273dc">Yusuf Siregar</a>
+                </strong>
+              </p>
+              <p>
+                <small>
+                  The website content and the <a href="https://bulma.io/" style="color:#3273dc">Bulma</a> source code is licensed under <a href="http://opensource.org/licenses/mit-license.php" style="color:#3273dc">MIT</a>
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </section>
+
+  <script type="text/javascript" src="lib/main.js"></script>
+</body>
+
+</html>
