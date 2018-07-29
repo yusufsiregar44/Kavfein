@@ -22,6 +22,21 @@
   </div>
 </template>
 
+<script>
+import { mapActions } from 'vuex';
+
+export default {
+  created() {
+    this.firestoreRealTime();
+  },
+  methods: {
+    ...mapActions([
+      'firestoreRealTime'
+    ]),
+  }
+}
+</script>
+
 <style lang="scss">
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
