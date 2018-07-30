@@ -4,12 +4,7 @@ import * as firebase from 'firebase';
 import router from './router.js';
 
 var config = {
-  apiKey: "AIzaSyCry2RCqBRix9Jr60ly68tKYXC0mhXmNBw",
-  authDomain: "kavfein.firebaseapp.com",
-  databaseURL: "https://kavfein.firebaseio.com",
-  projectId: "kavfein",
-  storageBucket: "kavfein.appspot.com",
-  messagingSenderId: "150526720983"
+  // moved to env
 };
 
 firebase.initializeApp(config);
