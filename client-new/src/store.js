@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as firebase from 'firebase';
+import router from './router.js';
 
 var config = {
   apiKey: "AIzaSyCry2RCqBRix9Jr60ly68tKYXC0mhXmNBw",
@@ -12,10 +13,10 @@ var config = {
 };
 
 firebase.initializeApp(config);
-const firestore = firebase.firestore();
-// eslint-disable-next-line
+
 const auth = firebase.auth();
 
+const firestore = firebase.firestore();
 const settings = {
   timestampsInSnapshots: true
 };
@@ -47,12 +48,15 @@ export default new Vuex.Store({
     reassignCartArr(state, payload) {
       return state.cartArr = (payload);
     },
+    assignAdminIsLoggedIn(state, payload) {
+      return state.adminIsLoggedIn = payload;
+    },
   },
   actions: {
     firestoreRealTime({ commit }) {
       // eslint-disable-next-line
       console.log('masuk');
-      firebase.firestore().collection('coffeeBeans').where('grade', "==", 'The Apprentice')
+    firestore.collection('coffeeBeans').where('grade', "==", 'The Apprentice')
         .onSnapshot(function (querySnapshot) {
           let beansArr = [];
           querySnapshot.forEach(function (doc) {
@@ -75,7 +79,7 @@ export default new Vuex.Store({
           commit('assignTheApprentice', beansArr);
         })
 
-      firebase.firestore().collection('coffeeBeans').where('grade', "==", "The Fellow")
+    firestore.collection('coffeeBeans').where('grade', "==", "The Fellow")
         .onSnapshot(function (querySnapshot) {
           let beansArr = [];
           querySnapshot.forEach(function (doc) {
@@ -98,7 +102,7 @@ export default new Vuex.Store({
           commit('assignTheFellow', beansArr);
         })
 
-      firebase.firestore().collection('coffeeBeans').where('grade', "==", 'The Grandmaster')
+    firestore.collection('coffeeBeans').where('grade', "==", 'The Grandmaster')
         .onSnapshot(function (querySnapshot) {
           let beansArr = [];
           querySnapshot.forEach(function (doc) {
@@ -136,5 +140,51 @@ export default new Vuex.Store({
       }
       context.commit('reassignCartArr', tempoCartArr);
     },
+    firebaseMonitorAuthState({ commit }) {
+      auth.onAuthStateChanged(firebaseUser => {
+        if (firebaseUser) {
+          commit('assignAdminIsLoggedIn', true)
+          // eslint-disable-next-line
+          console.log(firebaseUser);
+          router.push({ name: 'admin', query: { redirect: '/admin' } })
+        } else {
+          // eslint-disable-next-line
+          console.log('not logged in');
+        }
+      });
+    },
+    adminLogIn(context, payload) {
+      // eslint-disable-next-line
+      // console.log(payload);
+      return auth.signInWithEmailAndPassword(payload.email, payload.pass);
+    },
+    adminLogOut({ commit }) {
+      commit('assignAdminIsLoggedIn', false)
+      return auth.signOut();
+    },
+    addNewItem(context, payload) {
+      // eslint-disable-next-line
+      console.log(payload);
+       // return firestore.collection('coffeeBeans').add({
+       //   name: payload.name,
+       //   description: payload.description,
+       //   grade: payload.grade,
+       //   price: Number(payload.price),
+       //   imgSrc: payload.imgSrc,
+       // });
+    },
+    // removeTile(context, payload) {
+    //   console.log(payload);
+    //  firestore.collection('kanvan').doc(payload).delete()
+    //    // eslint-disable-next-line
+    //    .then((response) => {
+    //      console.log(response);
+    //    })
+    //    // eslint-disable-next-line
+    //    .catch((err) => {
+    //      console.log(err);
+    //      window.alert('Oops, something went wrong :(\nPlease try again)')
+    //    })
+    // },
   },
 });

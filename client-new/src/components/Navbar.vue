@@ -16,11 +16,17 @@
         <div class="navbar-end">
           <b-dropdown position="is-bottom-left">
             <a class="navbar-item" slot="trigger">
-              <a class="button is-inverted">
+              <a class="button is-inverted" v-if="adminIsLoggedIn === false">
                 <span class="icon">
                   <i class="fas fa-sign-in-alt"></i>
                 </span>
                 <span>Admin Login</span>
+              </a>
+              <a class="button is-inverted" @click="logout()" v-if="adminIsLoggedIn === true">
+                <span class="icon">
+                  <i class="fas fa-sign-out-alt"></i>
+                </span>
+                <span>Admin Logout</span>
               </a>
             </a>
 
@@ -33,14 +39,14 @@
                     <PasswordField @input="updatePassword"></PasswordField>
                   </section>
                   <footer class="modal-card-foot">
-                    <button class="button is-primary" @click="login">Login</button>
+                    <button class="button is-primary" @click="login()">Login</button>
                   </footer>
                 </div>
               </form>
             </b-dropdown-item>
           </b-dropdown>
 
-      <b-dropdown hoverable position="is-bottom-left">
+      <b-dropdown hoverable position="is-bottom-left" v-if="adminIsLoggedIn === false">
         <a class="navbar-item" slot="trigger">
           <span class="icon">
             <i class="fas fa-shopping-cart" style="font-size:20px; color: #363636"></i>
@@ -70,6 +76,7 @@ import CheckoutModal from '@/components/CheckoutModal.vue';
 import EmailField from '@/components/EmailField.vue';
 import PasswordField from '@/components/PasswordField.vue';
 import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 
 export default {
@@ -86,21 +93,47 @@ export default {
     };
   },
   computed: {
-    ...mapState([ 'cartArr' ])
+    ...mapState([ 'cartArr', 'adminIsLoggedIn' ])
   },
   methods: {
+    ...mapActions([ 'adminLogIn', 'adminLogOut' ]),
     login() {
-
+      this.adminLogIn({email: this.email, pass: this.password})
+      .catch(() => {
+        // eslint-disable-next-line
+        this.$toast.open({
+          duration: 1000,
+          message: 'Kindly enter a valid email/password',
+          position: 'is-top',
+          type: 'is-danger'
+        });
+      });
     },
-    // eslint-disable-next-line
+    logout() {
+      this.adminLogOut()
+      .then(() => {
+        this.$toast.open({
+          duration: 3000,
+          message: 'Successfully logged out',
+          position: 'is-top',
+          type: 'is-success'
+        });
+        this.$router.push({ name: 'home', query: { redirect: '/' } })
+      })
+      .catch(() => {
+        this.$toast.open({
+          duration: 3000,
+          message: 'Oops. something went wrong. Pleas try again.',
+          position: 'is-top',
+          type: 'is-danger'
+        });
+      })
+    },
     updateEmail(e) {
-      // eslint-disable-next-line
-      console.log(e);
+      this.email = e;
     },
-    // eslint-disable-next-line
     updatePassword(e) {
-      // eslint-disable-next-line
-      console.log(e);
+      this.password = e;
     },
   },
 }

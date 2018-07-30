@@ -28,10 +28,12 @@ import { mapActions } from 'vuex';
 export default {
   created() {
     this.firestoreRealTime();
+    this.firebaseMonitorAuthState();
   },
   methods: {
     ...mapActions([
-      'firestoreRealTime'
+      'firestoreRealTime',
+      'firebaseMonitorAuthState',
     ]),
   }
 }
