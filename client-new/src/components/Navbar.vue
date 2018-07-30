@@ -113,7 +113,7 @@ export default {
       this.adminLogOut()
       .then(() => {
         this.$toast.open({
-          duration: 3000,
+          duration: 1000,
           message: 'Successfully logged out',
           position: 'is-top',
           type: 'is-success'
@@ -122,7 +122,7 @@ export default {
       })
       .catch(() => {
         this.$toast.open({
-          duration: 3000,
+          duration: 1000,
           message: 'Oops. something went wrong. Pleas try again.',
           position: 'is-top',
           type: 'is-danger'

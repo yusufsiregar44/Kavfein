@@ -17,7 +17,7 @@
     <footer class="modal-card-foot">
       <div class="container">
         <b-field grouped>
-          <b-input type="number" placeholder="0,00" v-model="beanGrams"></b-input>
+          <b-input type="number" placeholder="0,00" v-model="beanGrams" min="0"></b-input>
           <b-select value="g">
             <option>g</option>
           </b-select>

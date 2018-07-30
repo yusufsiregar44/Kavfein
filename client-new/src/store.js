@@ -31,10 +31,14 @@ export default new Vuex.Store({
     theFellow: null,
     theGrandmaster: null,
     cartArr: [],
+    all: null,
   },
   mutations: {
     assignTheApprentice(state, payload) {
       return state.theApprentice = payload;
+    },
+    assignAll(state, payload) {
+      return state.all = payload;
     },
     assignTheFellow(state, payload) {
       return state.theFellow = payload;
@@ -54,9 +58,30 @@ export default new Vuex.Store({
   },
   actions: {
     firestoreRealTime({ commit }) {
-      // eslint-disable-next-line
-      console.log('masuk');
-    firestore.collection('coffeeBeans').where('grade', "==", 'The Apprentice')
+      firestore.collection('coffeeBeans')
+        .onSnapshot(function (querySnapshot) {
+          let beansArr = [];
+          querySnapshot.forEach(function (doc) {
+            let id = doc.id;
+            let name = doc.data().name;
+            let grade = doc.data().grade;
+            let price = doc.data().price;
+            let description = doc.data().description;
+            let imgSrc = doc.data().imgSrc;
+            let processedData = {
+              id: id,
+              name: name,
+              price: price,
+              imgSrc: imgSrc,
+              grade: grade,
+              description: description,
+            }
+            beansArr.push(processedData);
+          })
+          commit('assignAll', beansArr);
+        })
+
+      firestore.collection('coffeeBeans').where('grade', "==", 'The Apprentice')
         .onSnapshot(function (querySnapshot) {
           let beansArr = [];
           querySnapshot.forEach(function (doc) {
@@ -79,7 +104,7 @@ export default new Vuex.Store({
           commit('assignTheApprentice', beansArr);
         })
 
-    firestore.collection('coffeeBeans').where('grade', "==", "The Fellow")
+        firestore.collection('coffeeBeans').where('grade', "==", "The Fellow")
         .onSnapshot(function (querySnapshot) {
           let beansArr = [];
           querySnapshot.forEach(function (doc) {
@@ -102,7 +127,7 @@ export default new Vuex.Store({
           commit('assignTheFellow', beansArr);
         })
 
-    firestore.collection('coffeeBeans').where('grade', "==", 'The Grandmaster')
+        firestore.collection('coffeeBeans').where('grade', "==", 'The Grandmaster')
         .onSnapshot(function (querySnapshot) {
           let beansArr = [];
           querySnapshot.forEach(function (doc) {
@@ -145,11 +170,11 @@ export default new Vuex.Store({
         if (firebaseUser) {
           commit('assignAdminIsLoggedIn', true)
           // eslint-disable-next-line
-          console.log(firebaseUser);
+          // console.log(firebaseUser);
           router.push({ name: 'admin', query: { redirect: '/admin' } })
         } else {
           // eslint-disable-next-line
-          console.log('not logged in');
+          // console.log('not logged in');
         }
       });
     },
@@ -164,27 +189,34 @@ export default new Vuex.Store({
     },
     addNewItem(context, payload) {
       // eslint-disable-next-line
-      console.log(payload);
-       // return firestore.collection('coffeeBeans').add({
-       //   name: payload.name,
-       //   description: payload.description,
-       //   grade: payload.grade,
-       //   price: Number(payload.price),
-       //   imgSrc: payload.imgSrc,
-       // });
+      let file = payload.file;
+      // eslint-disable-next-line
+      let storageRef = firebase.storage().ref(file.name);
+      storageRef.put(file)
+      .then((snapshot) => {
+        snapshot.ref.getDownloadURL()
+          .then(uri => {
+            return firestore.collection('coffeeBeans').add({
+              name: payload.name,
+              description: payload.description,
+              grade: payload.grade,
+              price: Number(payload.price),
+              imgSrc: uri,
+            });
+          });
+      });
     },
-    // removeTile(context, payload) {
-    //   console.log(payload);
-    //  firestore.collection('kanvan').doc(payload).delete()
-    //    // eslint-disable-next-line
-    //    .then((response) => {
-    //      console.log(response);
-    //    })
-    //    // eslint-disable-next-line
-    //    .catch((err) => {
-    //      console.log(err);
-    //      window.alert('Oops, something went wrong :(\nPlease try again)')
-    //    })
-    // },
+    removeItem(context, payload) {
+     return firestore.collection('coffeeBeans').doc(payload).delete();
+    },
+    updateItem(context, payload) {
+      return firebase.firestore().collection('coffeeBeans').doc(payload.id).set({
+        name: payload.name,
+        description: payload.description,
+        grade: payload.grade,
+        price: Number(payload.price),
+        imgSrc: payload.imgSrc,
+      });
+    },
   },
 });
