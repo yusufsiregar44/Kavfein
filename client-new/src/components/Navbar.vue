@@ -31,7 +31,6 @@
                     <EmailField @input="updateEmail"></EmailField>
 
                     <PasswordField @input="updatePassword"></PasswordField>
-
                   </section>
                   <footer class="modal-card-foot">
                     <button class="button is-primary" @click="login">Login</button>
@@ -48,10 +47,15 @@
           </span>
         </a>
 
-      <b-dropdown-item custom>Blue Batak - 200g</b-dropdown-item>
+      <b-dropdown-item custom v-for="(item, index) in cartArr" v-bind:key="index">{{ item.name }} - {{ item.amount }}g</b-dropdown-item>
       <b-dropdown-item separator></b-dropdown-item>
       <b-dropdown-item custom>
-        <a class="button is-success">Checkout</a>
+        <a class="button is-success" @click="isComponentModalActive = true" v-if="cartArr.length !== 0">Checkout</a>
+                <a class="button is-success" disabled v-if="cartArr.length === 0">Checkout</a>
+        <b-modal :active.sync="isComponentModalActive" has-modal-card>
+          <CheckoutModal></CheckoutModal>
+        </b-modal>
+
       </b-dropdown-item>
     </b-dropdown>
 
@@ -62,19 +66,27 @@
 </template>
 
 <script>
-import EmailField from '@/components/EmailField.vue'
-import PasswordField from '@/components/PasswordField.vue'
+import CheckoutModal from '@/components/CheckoutModal.vue';
+import EmailField from '@/components/EmailField.vue';
+import PasswordField from '@/components/PasswordField.vue';
+import { mapState } from 'vuex';
+
 
 export default {
   components: {
     EmailField,
     PasswordField,
+    CheckoutModal,
   },
   data() {
     return {
       email: '',
       password: '',
+      isComponentModalActive: false,
     };
+  },
+  computed: {
+    ...mapState([ 'cartArr' ])
   },
   methods: {
     login() {

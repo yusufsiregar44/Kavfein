@@ -10,6 +10,7 @@ var config = {
   storageBucket: "kavfein.appspot.com",
   messagingSenderId: "150526720983"
 };
+
 firebase.initializeApp(config);
 const firestore = firebase.firestore();
 // eslint-disable-next-line
@@ -42,7 +43,10 @@ export default new Vuex.Store({
     },
     assignCartArr(state, payload) {
       return state.cartArr.push(payload);
-    }
+    },
+    reassignCartArr(state, payload) {
+      return state.cartArr = (payload);
+    },
   },
   actions: {
     firestoreRealTime({ commit }) {
@@ -119,6 +123,18 @@ export default new Vuex.Store({
       },
     addToCart(context, payload) {
       context.commit('assignCartArr', payload);
+    },
+    deleteItemsAtCart(context, payload) {
+      let arrOfCheckedItemsPosition =[]
+      let tempoCartArr = this.state.cartArr;
+      for (let i = 0; i < payload.length; i++) {
+        var position = tempoCartArr.map(function(e) { return e.name; }).indexOf(payload[i].name);
+        arrOfCheckedItemsPosition.push(position)
+      }
+      for (let i = 0; i < arrOfCheckedItemsPosition.length; i++) {
+        tempoCartArr.splice(arrOfCheckedItemsPosition[i], 1)
+      }
+      context.commit('reassignCartArr', tempoCartArr);
     },
   },
 });

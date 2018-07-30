@@ -25,7 +25,7 @@
           </p>
         </b-field>
         <h2 class="subtitle">Total price: {{ totalPrice }}</h2>
-        <button class="button is-success" @click="$parent.close(); addToCart({name: bean.name, amount: beanGrams, totalPrice: totalPrice});">Confirm</button>
+        <button class="button is-success" @click="add()">Confirm</button>
       </div>
     </footer>
   </div>
@@ -49,6 +49,22 @@ export default {
   props: [ 'bean' ],
   methods: {
     ...mapActions(['addToCart']),
+    add() {
+      if (this.beanGrams === null || this.beanGrams === "0") {
+        this.$swal({
+          type: 'error',
+          title: 'Please define your bean amount!',
+        });
+      } else {
+        this.$parent.close();
+        this.$swal(
+          'Success!',
+          'Item has been added to cart',
+          'success'
+        );
+        this.addToCart({name: this.bean.name, amount: Math.abs(Number(this.beanGrams)), totalPrice: this.totalPrice})
+      }
+    },
   },
 }
 </script>
