@@ -28,6 +28,7 @@ export default new Vuex.Store({
     theApprentice: null,
     theFellow: null,
     theGrandmaster: null,
+    cartArr: [],
   },
   mutations: {
     assignTheApprentice(state, payload) {
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     assignTheGrandmaster(state, payload) {
       return state.theGrandmaster = payload;
     },
+    assignCartArr(state, payload) {
+      return state.cartArr.push(payload);
+    }
   },
   actions: {
     firestoreRealTime({ commit }) {
@@ -112,6 +116,9 @@ export default new Vuex.Store({
           })
           commit('assignTheGrandmaster', beansArr);
         })
-      }
+      },
+    addToCart(context, payload) {
+      context.commit('assignCartArr', payload);
+    },
   },
 });
