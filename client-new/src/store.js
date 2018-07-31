@@ -4,7 +4,7 @@ import * as firebase from 'firebase';
 import router from './router.js';
 
 var config = {
-  // moved to env
+ // moved to env
 };
 
 firebase.initializeApp(config);
