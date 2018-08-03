@@ -1,10 +1,10 @@
 <template lang="html">
   <div class="card">
     <div class="card-content">
-      <p class="title">{{ bean.name }}</p>
-      <p class="subtitle is-6">{{ bean.grade }}</p>
-      <p class="subtitle is-6">{{ bean.description }}</p>
-      <p class="subtitle is-6">Rp.{{ bean.price}}</p>
+      <p class="title">{{ name }}</p>
+      <p class="subtitle is-6">{{ grade }}</p>
+      <p class="subtitle is-6">{{ description }}</p>
+      <p class="subtitle is-6">Rp.{{ price}}</p>
     </div>
     <footer class="card-footer">
       <div class="card-footer-item">
@@ -70,20 +70,34 @@ export default {
   data() {
     return {
       isComponentModalActive: false,
-      name: this.bean.name,
-      grade: this.bean.grade,
-      description: this.bean.description,
-      price: this.bean.price,
     };
   },
   props: ['bean'],
+  computed: {
+    name() {
+      let bean = this.bean.name;
+      return bean
+    },
+    grade() {
+      let grade = this.bean.grade;
+      return grade
+    },
+    description() {
+      let description = this.bean.description;
+      return description
+    },
+    price() {
+      let price = this.bean.price
+      return price
+    }
+  },
   methods: {
     ...mapActions([ 'removeItem', 'updateItem' ]),
     remove() {
       this.$dialog.confirm({
         title: 'Removing Item',
         message: `Are you sure you want to remove <b>${this.bean.name}</b>? This action cannot be undone.`,
-        confirmText: 'Delete Iteam',
+        confirmText: 'Delete Item',
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => this.executeRemove(),
